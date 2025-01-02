@@ -1,0 +1,8 @@
+pandas
+transformers
+torch
+dvc
+boto3
+fastapi
+uvicorn
+pyyaml

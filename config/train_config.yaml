@@ -1,0 +1,3 @@
+data_config: config/data_config.yaml
+data_path: data/reviews.csv
+model_save_path: model
