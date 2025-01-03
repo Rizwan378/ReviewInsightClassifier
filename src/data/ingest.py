@@ -106,3 +106,13 @@ class ReviewDataIngestion:
         data = data[data['review_text'].str.len() > 5]
         logger.info(f"Validated data, retained {len(data)} reviews")
         return data.reset_index(drop=True)
+
+    def validate_columns(self, data: pd.DataFrame) -> pd.DataFrame:
+        """Validate that required columns exist in review data."""
+        required = ['review_text', 'rating']
+        missing = [col for col in required if col not in data.columns]
+        if missing:
+            logger.error(f"Missing columns: {missing}")
+            raise ValueError(f"Data missing required columns: {missing}")
+        logger.info("All required columns validated")
+        return data
