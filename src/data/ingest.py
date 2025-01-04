@@ -116,3 +116,11 @@ class ReviewDataIngestion:
             raise ValueError(f"Data missing required columns: {missing}")
         logger.info("All required columns validated")
         return data
+
+    def extract_metadata(self, data: pd.DataFrame) -> pd.DataFrame:
+        """Extract metadata like review length and word count."""
+        data['review_length'] = data['review_text'].str.len()
+        data['word_count'] = data['review_text'].str.split().str.len()
+        data['has_emoji'] = data['review_text'].str.contains(r'[^\x00-\x7F]+')
+        logger.info("Extracted metadata: length, word count, emoji presence")
+        return data
