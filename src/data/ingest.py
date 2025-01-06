@@ -124,3 +124,11 @@ class ReviewDataIngestion:
         data['has_emoji'] = data['review_text'].str.contains(r'[^\x00-\x7F]+')
         logger.info("Extracted metadata: length, word count, emoji presence")
         return data
+
+    def filter_invalid_reviews(self, data: pd.DataFrame) -> pd.DataFrame:
+        """Remove reviews with invalid or empty text."""
+        original_len = len(data)
+        data = data.dropna(subset=['review_text'])
+        data = data[data['review_text'].str.strip() != '']
+        logger.info(f"Filtered {original_len - len(data)} invalid reviews")
+        return data.reset_index(drop=True)
