@@ -132,3 +132,12 @@ class ReviewDataIngestion:
         data = data[data['review_text'].str.strip() != '']
         logger.info(f"Filtered {original_len - len(data)} invalid reviews")
         return data.reset_index(drop=True)
+
+    def normalize_ratings(self, data: pd.DataFrame) -> pd.DataFrame:
+        """Normalize rating values to 0-1 range."""
+        if 'rating' in data.columns:
+            max_rating = data['rating'].max()
+            data['rating_normalized'] = data['rating'] / max_rating
+            data['rating_normalized'] = data['rating_normalized'].clip(0, 1)
+            logger.info(f"Normalized ratings to 0-1 range (max: {max_rating})")
+        return data
