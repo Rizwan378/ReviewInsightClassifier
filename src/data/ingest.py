@@ -141,3 +141,13 @@ class ReviewDataIngestion:
             data['rating_normalized'] = data['rating_normalized'].clip(0, 1)
             logger.info(f"Normalized ratings to 0-1 range (max: {max_rating})")
         return data
+
+    def log_data_stats(self, data: pd.DataFrame) -> None:
+        """Log statistics about the review dataset."""
+        stats = {
+            'num_reviews': len(data),
+            'avg_length': data['review_text'].str.len().mean(),
+            'unique_words': len(set(' '.join(data['review_text']).split())),
+            'rating_mean': data['rating'].mean() if 'rating' in data.columns else None
+        }
+        logger.info(f"Dataset stats: {stats}")
