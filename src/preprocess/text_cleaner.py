@@ -75,3 +75,11 @@ class TextCleaner:
         ngrams = [' '.join(words[i:i+n]) for i in range(len(words)-n+1)]
         logger.debug(f"Extracted {len(ngrams)} {n}-grams: {ngrams[:5]}")
         return ngrams
+
+    def remove_punctuation(self, text: str) -> str:
+        """Remove punctuation and special characters from review text."""
+        text = re.sub(r'[^\w\s]', '', text)
+        text = text.replace('\n', ' ').strip()
+        text = re.sub(r'\s+', ' ', text)
+        logger.debug(f"Removed punctuation: {text}")
+        return text
