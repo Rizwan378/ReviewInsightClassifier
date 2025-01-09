@@ -83,3 +83,11 @@ class TextCleaner:
         text = re.sub(r'\s+', ' ', text)
         logger.debug(f"Removed punctuation: {text}")
         return text
+
+    def tokenize_text(self, text: str) -> List[str]:
+        """Tokenize review text into words, preserving meaningful units."""
+        words = text.lower().split()
+        words = [word for word in words if len(word) > 1]
+        words = [word for word in words if word not in self.stop_words]
+        logger.debug(f"Tokenized text: {words}")
+        return words
