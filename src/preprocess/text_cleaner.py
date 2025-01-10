@@ -91,3 +91,13 @@ class TextCleaner:
         words = [word for word in words if word not in self.stop_words]
         logger.debug(f"Tokenized text: {words}")
         return words
+
+    def stem_words(self, text: str) -> str:
+        """Apply simple stemming to review text words."""
+        from nltk.stem.porter import PorterStemmer
+        stemmer = PorterStemmer()
+        words = self.tokenize_text(text)
+        stemmed = [stemmer.stem(word) for word in words]
+        result = ' '.join(stemmed)
+        logger.debug(f"Stemmed text: {result}")
+        return result
