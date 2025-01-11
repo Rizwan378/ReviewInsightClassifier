@@ -110,3 +110,12 @@ class TextCleaner:
             logger.warning("Text empty after number removal")
         logger.debug(f"Removed numbers: {text}")
         return text
+
+    def handle_contractions(self, text: str) -> str:
+        """Expand common contractions in review text."""
+        contractions = {"dont": "do not", "wont": "will not", "cant": "cannot"}
+        for contraction, expanded in contractions.items():
+            text = text.replace(contraction, expanded)
+        text = re.sub(r'\s+', ' ', text).strip()
+        logger.debug(f"Expanded contractions: {text}")
+        return text
