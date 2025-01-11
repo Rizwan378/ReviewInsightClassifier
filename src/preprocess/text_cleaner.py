@@ -101,3 +101,12 @@ class TextCleaner:
         result = ' '.join(stemmed)
         logger.debug(f"Stemmed text: {result}")
         return result
+
+    def remove_numbers(self, text: str) -> str:
+        """Remove numerical digits from review text."""
+        text = re.sub(r'\d+', '', text)
+        text = re.sub(r'\s+', ' ', text).strip()
+        if not text:
+            logger.warning("Text empty after number removal")
+        logger.debug(f"Removed numbers: {text}")
+        return text
