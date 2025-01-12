@@ -100,3 +100,16 @@ class BertSentimentIntentClassifier:
         for param_group in optimizer.param_groups:
             param_group['lr'] = new_lr
         logger.info(f"Epoch {epoch + 1}: Set learning rate to {new_lr}")
+
+    def augment_data(self, texts: List[str]) -> List[str]:
+        """Augment review texts by synonym replacement."""
+        from nltk.corpus import wordnet
+        augmented = []
+        for text in texts:
+            words = text.split()
+            if len(words) > 0 and wordnet.synsets(words[0]):
+                syn = wordnet.synsets(words[0])[0].lemmas()[0].name()
+                words[0] = syn
+            augmented.append(' '.join(words))
+        logger.info("Augmented review texts with synonyms")
+        return augmented
