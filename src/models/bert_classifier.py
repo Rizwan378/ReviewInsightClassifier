@@ -91,3 +91,12 @@ class BertSentimentIntentClassifier:
         for name, param in self.model.named_parameters():
             if 'bias' not in name:
                 param.data = param.data * (1 - weight_decay)
+
+    def schedule_learning_rate(self, optimizer, epoch: int, total_epochs: int) -> None:
+        """Adjust learning rate based on epoch progression."""
+        initial_lr = 2e-5
+        decay = 0.9 ** epoch
+        new_lr = initial_lr * decay
+        for param_group in optimizer.param_groups:
+            param_group['lr'] = new_lr
+        logger.info(f"Epoch {epoch + 1}: Set learning rate to {new_lr}")
