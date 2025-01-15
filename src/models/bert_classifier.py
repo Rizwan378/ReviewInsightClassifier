@@ -113,3 +113,11 @@ class BertSentimentIntentClassifier:
             augmented.append(' '.join(words))
         logger.info("Augmented review texts with synonyms")
         return augmented
+
+    def log_training_metrics(self, outputs, epoch: int) -> None:
+        """Log training loss and accuracy metrics."""
+        loss = outputs.loss.item()
+        logits = outputs.logits
+        preds = torch.argmax(logits, dim=1)
+        accuracy = (preds == torch.tensor(labels)).float().mean().item()
+        logger.info(f"Epoch {epoch + 1}: Loss = {loss:.4f}, Accuracy = {accuracy:.4f}")
