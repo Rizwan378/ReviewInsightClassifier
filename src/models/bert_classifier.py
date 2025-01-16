@@ -121,3 +121,10 @@ class BertSentimentIntentClassifier:
         preds = torch.argmax(logits, dim=1)
         accuracy = (preds == torch.tensor(labels)).float().mean().item()
         logger.info(f"Epoch {epoch + 1}: Loss = {loss:.4f}, Accuracy = {accuracy:.4f}")
+
+    def adjust_batch_size(self, texts: List[str], max_batch: int = 16) -> List[List[str]]:
+        """Split texts into batches for efficient training."""
+        batch_size = min(max_batch, len(texts))
+        batches = [texts[i:i + batch_size] for i in range(0, len(texts), batch_size)]
+        logger.info(f"Split {len(texts)} texts into {len(batches)} batches")
+        return batches
