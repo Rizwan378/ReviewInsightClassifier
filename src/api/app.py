@@ -89,3 +89,15 @@ async def prediction_stats():
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=8000)
+
+@app.post("/predict_with_confidence")
+async def predict_with_confidence(review_text: str):
+    """Predict sentiment and intent with confidence scores."""
+    prediction = model.predict(review_text)
+    inputs = model.tokenizer(review_text, return_tensors='pt', padding=True, truncation=True)
+    with torch.no_grad():
+        outputs = model.model(**inputs)
+        probs = torch.softmax(outputs.logits, dim=1).tolist()[0]
+    prediction['confidence'] = {'sentiment': probs[:3], 'intent': probs[3:]}
+    logger.info(f"Predicted with confidence for: {review_text}")
+    return prediction
