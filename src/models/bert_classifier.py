@@ -128,3 +128,12 @@ class BertSentimentIntentClassifier:
         batches = [texts[i:i + batch_size] for i in range(0, len(texts), batch_size)]
         logger.info(f"Split {len(texts)} texts into {len(batches)} batches")
         return batches
+
+    def apply_weight_decay(self, optimizer, weight_decay: float = 0.01) -> None:
+        """Apply weight decay to model parameters."""
+        for param_group in optimizer.param_groups:
+            param_group['weight_decay'] = weight_decay
+        logger.info(f"Applied weight decay of {weight_decay} to optimizer")
+        for name, param in self.model.named_parameters():
+            if 'bias' not in name:
+                param.data = param.data * (1 - weight_decay)
