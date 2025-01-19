@@ -101,3 +101,15 @@ async def predict_with_confidence(review_text: str):
     prediction['confidence'] = {'sentiment': probs[:3], 'intent': probs[3:]}
     logger.info(f"Predicted with confidence for: {review_text}")
     return prediction
+
+@app.post("/validate_input")
+async def validate_input(review_text: str):
+    """Validate review text before prediction."""
+    if not review_text or len(review_text.strip()) < 5:
+        logger.error("Invalid input: Review text too short")
+        raise HTTPException(status_code=400, detail="Review text must be at least 5 characters")
+    if not any(c.isalpha() for c in review_text):
+        logger.error("Invalid input: No alphabetic characters")
+        raise HTTPException(status_code=400, detail="Review text must contain letters")
+    logger.info("Input validated successfully")
+    return {"status": "valid"}
