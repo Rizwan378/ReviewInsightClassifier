@@ -113,3 +113,15 @@ async def validate_input(review_text: str):
         raise HTTPException(status_code=400, detail="Review text must contain letters")
     logger.info("Input validated successfully")
     return {"status": "valid"}
+
+@app.get("/model_info")
+async def model_info():
+    """Return information about the loaded BERT model."""
+    info = {
+        "model_type": "bert-base-uncased",
+        "num_labels": model.model.config.num_labels,
+        "sentiment_labels": model.sentiment_labels,
+        "intent_labels": model.intent_labels
+    }
+    logger.info("Retrieved model information")
+    return info
